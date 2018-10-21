@@ -8,11 +8,47 @@ body{
     justify-content: center;
 }
 .conteudo{
-    margin-top: 30vh;
+    margin-top: 15vh;
+    height: 500px;
+    border-radius: 10px;
+    background-color: blueviolet;
+}
+.animation{
+    display: flex;
+    height: 100px;
+    margin-top: 7em;
+    align-items: center;
+    justify-content: center;
+    transition: 0.5s;
+    transform: rotate(-15deg) skew(25deg) scale(.8);
+    width: 40em;
 }
 .titulo{
     font-size: 2em;
     font-weight: 800;
+    transition: 0.5s;
+    margin-bottom: 100px;
+    position: absolute;
+}
+.animation:hover .titulo:nth-child(4){
+    transform: translate(20px,-20px);
+    color: rgb(1, 187, 187);
+    opacity: .4;
+}
+.animation:hover .titulo:nth-child(3){
+    transform: translate(-100px,100px);
+    color: rgb(13, 177, 13);
+    opacity: .6;
+}
+.animation:hover .titulo:nth-child(2){
+    transform: translate(-60px,60px);
+    color:orange;
+    opacity: .8;
+}
+.animation:hover .titulo:nth-child(1){
+    transform: translate(-20px,20px);
+    color: red;
+    opacity: 1;
 }
 .botoesmenu{
     margin-top: 3em;
