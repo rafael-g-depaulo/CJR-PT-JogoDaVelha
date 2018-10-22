@@ -1,6 +1,6 @@
 var canvas = document.getElementById('canv');
 var c = canvas.getContext('2d');
-
+let g =1;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 let textBox = {
@@ -15,9 +15,9 @@ function Circle(x,y,dx,dy,radius){
     this.x=x;
     this.y=y;
     this.dx=dx;
-    this.dy=dy;
+    this.dy=0;
     this.radius = radius;
-
+    this.Ec = radius*Math.pow(dy,2)/2;
     this.draw = function(){
         c.beginPath();
         c.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
@@ -31,11 +31,16 @@ function Circle(x,y,dx,dy,radius){
         if(this.x + this.radius > canvas.width || this.x - this.radius <0){
             this.dx= -this.dx;
         }
-        if(this.y + this.radius > canvas.height || this.y - this.radius < 0){
+        if(this.y + this.radius > canvas.height){
             this.dy= -this.dy;
+        }
+        if(this.y + this.radius > canvas.height ){
+            this.dy *=0.9;
+            console.log("Bateu no chão");
         }
         this.x += this.dx;
         this.y += this.dy;
+        this.dy +=0.2;
         this.draw();
     }
 }
@@ -45,7 +50,7 @@ for(i=0;i<100;i++){
     var x = Math.random() * (canvas.width - radius *2)+ radius;
     var y = Math.random() * (canvas.height-radius *2)+ radius;
     var dx = (Math.random() -0.5) * 8;
-    var dy = (Math.random() - 0.5)* 8;
+    var dy = (Math.random() - 0.5)* 0;
     circleArray.push(new Circle(x,y,dx,dy,radius));
 }
 function WriteText(){
