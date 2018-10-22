@@ -15,13 +15,8 @@ let board = [
 // contador de turno
 let qualTurnoEh = 0
 
-// aloca os eventListeners
-for (elemento of boardString)
-    document.getElementById(elemento).addEventListener('click', clicarQuadrado(elemento))
-
-
 // cria os eventListeners
-const clicarQuadrado = (quadrado) => 
+const clicarQuadrado = (quadrado) =>
     () => {
         document.getElementById(quadrado).style.backgroundImage = 'url("x.png")'
         // logica a ser codada
@@ -30,7 +25,6 @@ const clicarQuadrado = (quadrado) =>
         //  winCond()
     }
 
-
 const winCond = () => {
     // checa se terminou o jogo
 }
@@ -38,3 +32,12 @@ const winCond = () => {
 const resetGame = () => {
     // reseta o jogo
 }
+
+const setSquare = (xOr0) => {
+
+}
+
+// aloca os eventListeners
+for (elemento of boardString)
+    document.getElementById(elemento).addEventListener('click', clicarQuadrado(elemento))
+
