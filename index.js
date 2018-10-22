@@ -1,6 +1,3 @@
-
-
-
 // strings dos id's do campo
 const boardString = [
     'a1', 'a2', 'a3', 
@@ -19,7 +16,7 @@ let board = [
 ]
 
 // contador de turno
-let qualTurnoEh = 0
+let turnCounter = 0
 
 // cria os eventListeners
 const clicarQuadrado = (quadrado) =>
@@ -35,8 +32,18 @@ const winCond = () => {
     // checa se terminou o jogo
 }
 
-const resetGame = () => {
-    // reseta o jogo
+let resetGame = () => {
+    // reseta a representação em memória do jogo
+    for (row of board)
+    for (sqr in row)
+        row[sqr] = undefined
+
+    turnCounter = 0
+
+    // reseta os gráficos
+    boardString.forEach (
+        (sqr) => document.getElementById(sqr).style.backgroundImage = ''
+    )
 }
 
 const setSquare = (xOr0) => {
