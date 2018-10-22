@@ -9,9 +9,10 @@ body{
 }
 .conteudo{
     margin-top: 15vh;
-    height: 500px;
+    height:auto;
     border-radius: 10px;
     position: absolute;
+    width: auto;
 }
 .canv{
     position: absolute;
