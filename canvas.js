@@ -3,57 +3,6 @@ var c = canvas.getContext('2d');
 let g =0.1;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
-let textBox = {
-    x:canvas.width/2,
-    y:canvas.height/2 -100,
-    width: 300,
-    height: 300
-}
-let firstButton = {
-    x:textBox.x-220,
-    y:textBox.y+50,
-    width:200,
-    height: 40
-}
-let BgButton = 'green';
-
-
-//Função para escrever o texto na tela
-/* Botao 1: textBox.x-120 textBox.y+80 */
-/* Botao 2: textBox.x+120 textBox+80*/
-function WriteText(){
-    c.font = "30px Comic Sans MS";
-    c.textAlign = "center";
-    c.fillStyle = 'black';
-    var Txt = "Bem vindo ao Jogo da Velha";
-    var B1 = "Começar Jogo";
-    var B2 = "Começar Jogo";
-
-    c.fillText(Txt, textBox.x, textBox.y);
-
-    //Escrevendo primeiro Botão
-    c.fillStyle = BgButton;
-    c.fillRect(firstButton.x, firstButton.y,firstButton.width, firstButton.height);
-    c.fillStyle ='white';
-    c.font = "25px Comic Sans MS";
-    c.fillText(B1,textBox.x-120 ,textBox.y+80);
-
-
-    c.fillText(B2,textBox.x+120 ,textBox.y+80);
-}
-canvas.addEventListener('click', function(event) {
-    if (
-      event.x > firstButton.x && 
-      event.x < firstButton.x + firstButton.width &&
-      event.y > firstButton.y && 
-      event.y < firstButton.y + firstButton.height
-    ) {
-      BgButton = 'red';
-    }
-    else{
-        BgButton= 'black'
-    }
-});
 
 
     /* Parte da animação das bolas */
@@ -124,7 +73,7 @@ function animate(){
         circleArray.push(new Circle(x,-radius,dx,dy,radius));
     }
     c.clearRect(0,0,canvas.width,canvas.height);
-    WriteText();
+    // WriteText();
     for(var i = 0; i< circleArray.length;i++){
         circleArray[i].update();
         if(circleArray[i].y > canvas.height +circleArray[i].radius){
@@ -149,4 +98,4 @@ function StartGame(){
     game[0].style.display ='flex';
     
 }
-// canvas.addEventListener('click', StartGame);
+
