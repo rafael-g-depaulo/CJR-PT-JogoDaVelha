@@ -8,8 +8,14 @@ const boardString = [
     'c1', 'c2', 'c3'
 ]
 
+// representação em memória do campo de jogo
+//   undenifed => vazio
+//   0 => x
+//   1 => o
 let board = [
-    // reprensentação do campo de jogo
+    [undefined, undefined, undefined],
+    [undefined, undefined, undefined],
+    [undefined, undefined, undefined]
 ]
 
 // contador de turno
