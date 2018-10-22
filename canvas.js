@@ -17,6 +17,8 @@ function Circle(x,y,dx,dy,radius){
     this.dx=dx;
     this.dy=0;
     this.radius = radius;
+    this.maxHeight = y;
+    this.isnFreezed = true;
     this.Ec = radius*Math.pow(dy,2)/2;
     this.draw = function(){
         c.beginPath();
@@ -31,19 +33,30 @@ function Circle(x,y,dx,dy,radius){
         if(this.x + this.radius > canvas.width || this.x - this.radius <0){
             this.dx= -this.dx;
         }
-        if(this.y + this.radius > canvas.height){
+        if(this.y + this.radius > canvas.height && this.isnFreezed){
             this.dy= -this.dy;
+        }
+        if(this.dy < 0.2 && this.dy > -0.2){ //Creditos: Artur Hugo
+            this.maxHeight = this.y;
+        }
+        if(this.maxHeight > canvas.height - 2*this.radius){
+            this.isnFreezed = false;
         }
         if(this.y + this.radius > canvas.height ){
             this.dy *=0.9;
             console.log("Bateu no chão");
+            console.log(this.maxHeight);
+            console.log(canvas.height - 4*this.radius);
+        
         }
+        console.log(this.dy);
         this.x += this.dx;
         this.y += this.dy;
-        this.dy +=0.2;
+        this.dy +=0.1;
         this.draw();
     }
 }
+
 var circleArray = [];
 for(i=0;i<100;i++){
     var radius = (Math.random()*10)+30;
@@ -62,11 +75,23 @@ function WriteText(){
 }
 function animate(){
     requestAnimationFrame(animate);
+    var Spawn;
+    Spawn = Math.random() * 50;
+    if(Spawn < 1){
+        var radius = (Math.random()*10)+30;
+        var x = Math.random() * (canvas.width - radius *2)+ radius;
+        var y = Math.random() * (canvas.height-radius *2)+ radius;
+        var dx = (Math.random() -0.5) * 8;
+        var dy = (Math.random() - 0.5)* 0;
+        circleArray.push(new Circle(x,-radius,dx,dy,radius));
+    }
     c.clearRect(0,0,canvas.width,canvas.height);
     WriteText();
     for(var i = 0; i< circleArray.length;i++){
         circleArray[i].update();
+
     }
+    //Matar bolas
 }
 animate();
 function StartGame(){
