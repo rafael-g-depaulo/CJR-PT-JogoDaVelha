@@ -1,21 +1,40 @@
-// const board = [
-//     document.getElementById("a1"), document.getElementById("a2"), document.getElementById("a3"),
-//     document.getElementById("b1"), document.getElementById("b2"), document.getElementById("b3"),
-//     document.getElementById("c1"), document.getElementById("c2"), document.getElementById("c3"),
-// ]
 
-const board = [
+
+
+// strings dos id's do campo
+const boardString = [
     'a1', 'a2', 'a3', 
     'b1', 'b2', 'b3', 
     'c1', 'c2', 'c3'
 ]
 
-for (elemento of board) {
+let board = [
+    // reprensentação do campo de jogo
+]
+
+// contador de turno
+let qualTurnoEh = 0
+
+// aloca os eventListeners
+for (elemento of boardString)
     document.getElementById(elemento).addEventListener('click', clicarQuadrado(elemento))
+
+
+// cria os eventListeners
+const clicarQuadrado = (quadrado) => 
+    () => {
+        document.getElementById(quadrado).style.backgroundImage = 'url("x.png")'
+        // logica a ser codada
+
+        // checar vitória
+        //  winCond()
+    }
+
+
+const winCond = () => {
+    // checa se terminou o jogo
 }
 
-function clicarQuadrado(quadrado) {
-    return () => {
-        document.getElementById(quadrado).style.backgroundImage = 'url("x.png")'
-    }
+const resetGame = () => {
+    // reseta o jogo
 }
