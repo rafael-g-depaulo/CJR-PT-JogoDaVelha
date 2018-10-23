@@ -33,7 +33,8 @@ const winCond = () => {
 
     // vitória horizontal
     for (row in board)
-    if (board[row].filter(x => x === board[row][0]).length === board[row].length) // se todos os elementos da array são iguais
+    // se todos os elementos da array são iguais
+    if (board[row].filter(x => x === board[row][0] && x !== undefined).length === board[row].length)
         return {
             win: 'hor',
             num: row,
@@ -41,20 +42,20 @@ const winCond = () => {
         }
 
     // vitória vertical
-    for (let col = 0; col < board[0].length; col++) {
-        // checa cada elemento de uma linha
-        for (row in board) {
-            // se for diferente da primeira, va a próxima linha
-            if (board[row][col] !== board[row][0])
-                break
-            // se chegou no ultimo elemento da linha, retorna a vitória
-            else if (row === board.length-1)
-                return {
-                    win: 'dia',
-                    num: row,
-                    player: board[row][col]
-                }
-        }
+    for (col in board) {
+        let colFirst = board[0][col]
+
+        // se algum quadrado da coluna for diferente do primeiro quadrado da coluna, ou for undefined,
+        // va para a próxima coluna
+        for (row in board)
+        if (board[row][col] !== colFirst || board[row][col] === undefined)
+            break
+        else if (row == board.length-1)
+            return {
+                win: 'ver',
+                num: col,
+                player: board[0][col]
+            }
     }
 
     // vitória diagonal principal (\)
