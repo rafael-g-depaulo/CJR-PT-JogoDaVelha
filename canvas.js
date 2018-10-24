@@ -1,6 +1,6 @@
 var canvas = document.getElementById('canv');
 var c = canvas.getContext('2d');
-let g =0.98;
+let g =0.098;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
@@ -91,6 +91,16 @@ function Exs(x,y,dx,dy,radius){
         if(this.y + 1.5*this.radius > canvas.height){
             this.dy *=0.95;        
         }
+        if( mouse.x > this.x - this.radius &&
+			mouse.x < this.x + this.radius &&
+			mouse.y < this.y + this.radius &&
+			mouse.y > this.y - this.radius
+        ){
+			this.dx+=mouse.dx;
+			this.dy+=mouse.dy;
+			// this.x=mouse.x;
+			// this.y=mouse.y;
+        }
         this.x += this.dx;
         this.y += this.dy;
         this.dy += g;
@@ -159,18 +169,18 @@ function Circle(x,y,dx,dy,radius){
 let circleArray = [];
 let exsArray =[];
 let InitialQuant =1;
-let SpawnRate = 25;
+let SpawnRate = 50;
 //Cria Bolas Espalhadas pela tela
 for(i=0;i< InitialQuant;i++){
-    var radius = (Math.random()*10)+300;
+    var radius = (Math.random()*10)+200;
     var x = Math.random() * (canvas.width - radius *2)+ radius;
     var y = Math.random() * (canvas.height-radius *2)+ radius;
     var dx = (Math.random() -0.5) * 8;
     var dy = (Math.random() - 0.5)* 0;
     circleArray.push(new Circle(x,y,dx,dy,radius));
 }
-for(i=0;i< 10;i++){
-    var radius = (Math.random()*10)+30;
+for(i=0;i< InitialQuant;i++){
+    var radius = (Math.random()*10)+200;
     var x = Math.random() * (canvas.width - radius *2)+ radius;
     var y = Math.random() * (canvas.height-radius *2)+ radius;
     var dx = (Math.random() -0.5) * 8;
@@ -217,7 +227,7 @@ function animate(){
     }
     if(circleArray.length < 30){
         g=0.1;
-        SpawnRate = 30;
+        SpawnRate = 50;
     }
 }
 animate();
