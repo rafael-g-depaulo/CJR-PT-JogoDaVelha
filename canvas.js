@@ -21,8 +21,8 @@ canvas.addEventListener('mousemove',
 	mouse.y = event.y;
 	timestamp = now;
 });
-    /* Parte da animação das bolas */
-//Cria Variaveis e as funções que controlam a fisica dos circulos
+    /* Parte da animação Dos objetos */
+//Cria Variaveis e as funções que controlam a fisica dos X's
 function Exs(x,y,dx,dy,radius){
     this.x=x;
     this.y=y;
@@ -107,6 +107,8 @@ function Exs(x,y,dx,dy,radius){
         this.draw();
     }
 }
+
+//Cria Variaveis e as funções que controlam a fisica dos O's
 function Circle(x,y,dx,dy,radius){
     this.x=x;
     this.y=y;
@@ -165,28 +167,14 @@ function Circle(x,y,dx,dy,radius){
         this.draw();
     }
 }
-//
+
+//Variaveis para Começar a Animação
 let circleArray = [];
 let exsArray =[];
 let InitialQuant =1;
-let SpawnRate = 50;
-//Cria Bolas Espalhadas pela tela
-for(i=0;i< InitialQuant;i++){
-    var radius = (Math.random()*10)+200;
-    var x = Math.random() * (canvas.width - radius *2)+ radius;
-    var y = Math.random() * (canvas.height-radius *2)+ radius;
-    var dx = (Math.random() -0.5) * 8;
-    var dy = (Math.random() - 0.5)* 0;
-    circleArray.push(new Circle(x,y,dx,dy,radius));
-}
-for(i=0;i< InitialQuant;i++){
-    var radius = (Math.random()*10)+200;
-    var x = Math.random() * (canvas.width - radius *2)+ radius;
-    var y = Math.random() * (canvas.height-radius *2)+ radius;
-    var dx = (Math.random() -0.5) * 8;
-    var dy = (Math.random() - 0.5)* 0;
-    exsArray.push(new Exs(x,y,dx,dy,radius));
-}
+let SpawnRate = 20;
+
+//Função para criar aleatoriamente um X e um O acima da tela
 function SpawnDuble(){
 	var Spawn;
     Spawn = Math.random() * SpawnRate;
@@ -205,8 +193,9 @@ function SpawnDuble(){
         exsArray.push(new Exs(x,-radius,dx,dy,radius));
     }
 }
+let willAnimate = true;
+//Função Da animação principal
 function animate(){
-    requestAnimationFrame(animate);
     c.clearRect(0,0,canvas.width,canvas.height);
 	SpawnDuble();
     for(var i = 0; i< circleArray.length;i++){
@@ -217,25 +206,36 @@ function animate(){
     }
     for(var i = 0; i< exsArray.length;i++){
         exsArray[i].update();
-        if(exsArray[i].y > canvas.height +exsArray[i].radius){
+        if(exsArray[i].y > canvas.height + exsArray[i].radius){
             exsArray.splice(i,1);
         }
     }
-    if(circleArray.length>50){
+    if(circleArray.length>20){
         g=0.2;
         SpawnRate = 70;
     }
-    if(circleArray.length < 30){
+    else{
         g=0.1;
         SpawnRate = 50;
     }
+    if(willAnimate)requestAnimationFrame(animate);
 }
-animate();
+animate();  //Inicia a animação quando a tela é carregada
+
+// Para a animação e torna a tela do jogo como foco
 function StartGame(){
     var menu = document.getElementsByClassName('menu');
     var game = document.getElementsByClassName('wrapper');
     menu[0].style.display ='none';
     game[0].style.display ='flex';
-    
+    willAnimate =false;
+}
+function Sair(){
+    var menu = document.getElementsByClassName('menu');
+    var game = document.getElementsByClassName('wrapper');
+    menu[0].style.display ='flex';
+    game[0].style.display ='none';
+    willAnimate =true;
+    animate();
 }
 
