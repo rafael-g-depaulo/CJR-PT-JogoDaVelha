@@ -4,6 +4,9 @@ let g =0.098;
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
+//Cores:
+let CorDefundo = '#125567';
+
 //Interações com o mouse
 let mouse = {
     x:undefined,
@@ -11,6 +14,10 @@ let mouse = {
     dx:0,
     dy:0
 }
+window.addEventListener('resize', function (){
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
 var timestamp = Date.now();
 canvas.addEventListener('mousemove',
     function(event){
@@ -21,6 +28,19 @@ canvas.addEventListener('mousemove',
 	mouse.y = event.y;
 	timestamp = now;
 });
+
+//Variaveis para Começar a Animação
+let circleArray = [];
+let exsArray =[];
+let Objects =[];
+let InitialQuant =1;
+let SpawnRate = 20;
+
+// Função para calculo de distancia:
+function dist(x1,y1,x2,y2){
+    return Math.sqrt(Math.pow(x1-x2,2)+Math.pow(y1-y2,2));
+}
+
     /* Parte da animação Dos objetos */
 //Cria Variaveis e as funções que controlam a fisica dos X's
 function Exs(x,y,dx,dy,radius){
@@ -88,18 +108,26 @@ function Exs(x,y,dx,dy,radius){
 		else{
 			this.isnFreezed = true;
 		}
-        if(this.y + 1.5*this.radius > canvas.height){
-            this.dy *=0.95;        
+        if(this.y + this.radius > canvas.height){
+            this.dy *=0.9;        
         }
-        if( mouse.x > this.x - this.radius &&
+		if( mouse.x > this.x - this.radius &&
 			mouse.x < this.x + this.radius &&
 			mouse.y < this.y + this.radius &&
 			mouse.y > this.y - this.radius
         ){
 			this.dx+=mouse.dx;
 			this.dy+=mouse.dy;
-			// this.x=mouse.x;
-			// this.y=mouse.y;
+        }
+        for(cir of Objects){
+            if(dist(this.x,this.y,cir.x,cir.y) < this.radius + cir.radius){
+                var swap = this.dx;
+                this.dx = cir.dx;
+                cir.dx = swap;
+                swap = this.dy;
+                this.dy = cir.dy;
+                cir.dy = swap;
+            }
         }
         this.x += this.dx;
         this.y += this.dy;
@@ -127,7 +155,7 @@ function Circle(x,y,dx,dy,radius){
         c.fill();
         c.beginPath();
         c.arc(this.x,this.y,this.radius/2,0,Math.PI*2,false);
-        c.fillStyle= 'white';
+        c.fillStyle= CorDefundo;
         c.fill();
     }
 
@@ -158,8 +186,17 @@ function Circle(x,y,dx,dy,radius){
         ){
 			this.dx+=mouse.dx;
 			this.dy+=mouse.dy;
-			// this.x=mouse.x;
-			// this.y=mouse.y;
+        }
+        for(cir of Objects){
+            if(dist(this.x,this.y,cir.x,cir.y) < this.radius + cir.radius){
+                var swap = this.dx;
+                this.dx = cir.dx;
+                cir.dx = swap;
+                swap = this.dy;
+                this.dy = cir.dy;
+                cir.dy = swap;
+                // this.x = this.x+this.radius + cir.radius
+            }
         }
         this.x += this.dx;
         this.y += this.dy;
@@ -168,46 +205,41 @@ function Circle(x,y,dx,dy,radius){
     }
 }
 
-//Variaveis para Começar a Animação
-let circleArray = [];
-let exsArray =[];
-let InitialQuant =1;
-let SpawnRate = 20;
-
 //Função para criar aleatoriamente um X e um O acima da tela
 function SpawnDuble(){
 	var Spawn;
     Spawn = Math.random() * SpawnRate;
     if(Spawn < 1){
-        var radius = (Math.random()*10)+20;
-        var x = Math.random() * (canvas.width - radius *2)+ radius;
+        var radius1 = (Math.random()*10)+20;
+        var x1 = Math.random() * (canvas.width - radius1 *2)+ radius1;
         var dx = (Math.random() -0.5) * 8;
         var dy = (Math.random() - 0.5)* 0;
-        circleArray.push(new Circle(x,-radius,dx,dy,radius));
+        Objects.push(new Circle(x1,-radius1,dx,dy,radius1));
     }
     if(Spawn < 1){
-        var radius = (Math.random()*10)+20;
-        var x = Math.random() * (canvas.width - radius *2)+ radius;
-        var dx = (Math.random() -0.5) * 8;
-        var dy = (Math.random() - 0.5)* 0;
-        exsArray.push(new Exs(x,-radius,dx,dy,radius));
+        do{
+            var radius2 = (Math.random()*10)+20;
+            var x2 = Math.random() * (canvas.width - radius2 *2)+ radius2;
+            var dx = (Math.random() -0.5) * 8;
+            var dy = (Math.random() - 0.5)* 0;
+        }while(dist(x1,0,x2,0) < radius1 + radius2);
+        Objects.push(new Exs(x2, -radius2, dx, dy, radius2));
     }
 }
 let willAnimate = true;
 //Função Da animação principal
 function animate(){
     c.clearRect(0,0,canvas.width,canvas.height);
+    c.fillStyle = CorDefundo;
+    c.fillRect(0,0,window.innerWidth,window.innerHeight);
 	SpawnDuble();
-    for(var i = 0; i< circleArray.length;i++){
-        circleArray[i].update();
-        if(circleArray[i].y > canvas.height +circleArray[i].radius){
-            circleArray.splice(i,1);
-        }
-    }
-    for(var i = 0; i< exsArray.length;i++){
-        exsArray[i].update();
-        if(exsArray[i].y > canvas.height + exsArray[i].radius){
-            exsArray.splice(i,1);
+    for(var i = 0; i< Objects.length;i++){
+        Objects[i].update();
+        if( Objects[i].y > canvas.height + Objects[i].radius ||
+            Objects[i].x + Objects[i].radius < 0 ||
+            Objects[i].x - Objects[i].radius > canvas.width
+            ){
+            Objects.splice(i,1);
         }
     }
     if(circleArray.length>20){
@@ -220,7 +252,6 @@ function animate(){
     }
     if(willAnimate)requestAnimationFrame(animate);
 }
-animate();  //Inicia a animação quando a tela é carregada
 
 // Para a animação e torna a tela do jogo como foco
 function StartGame(){
@@ -239,3 +270,4 @@ function Sair(){
     animate();
 }
 
+Sair();  //Inicia a animação quando a tela é carregada
