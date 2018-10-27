@@ -21,12 +21,53 @@ let turnCounter = 0
 // cria os eventListeners
 const clicarQuadrado = (quadrado) =>
     () => {
-        document.getElementById(quadrado).style.backgroundImage = 'url("x.png")'
-        // logica a ser codada
+        var foiJogado;
 
+        // Variavel para armazenar informação a jogada foi feita efetivamente
+        foiJogado = changeBG(quadrado);
+
+        // Caso a jogada tenha sido feita
+        if(foiJogado){
+            changeBoard(quadrado);      //O armazanemento da memória do Tabuleiro é alterado
+            turnCounter+=1;             //Turno é incrementado
+            var winned;
+            winned = winCond();         //É checado se alguém ganhou
+            if(winned != false){
+                
+            }
+        }
+        // logica a ser codada
         // checar vitória
         //  winCond()
     }
+
+//Tenta trocar o Background de algum quadrado
+const changeBG = (quadrado) => {
+    //Retorna true se o fundo tiver sido trocado corretamente
+    //Retorna false caso contrário
+
+    var bg = document.getElementById(quadrado).style.backgroundImage;
+
+    if(bg == 'url("o.png")' ||bg == 'url("x.png")'){
+        return false;
+    }
+    else{
+        if(turnCounter%2 == 0){
+            document.getElementById(quadrado).style.backgroundImage = 'url("x.png")';
+        }
+        else{
+            document.getElementById(quadrado).style.backgroundImage = 'url("o.png")';
+        }
+        return true;
+    }
+}
+
+//Muda a informação na memoria de como está o campo
+const changeBoard = (quadrado) => {
+    var Idx;
+    Idx = boardString.indexOf(quadrado);
+    board[parseInt(Idx/board.length)][Idx%board.length] = turnCounter%2;
+}
 
 const winCond = () => {
     // checa se terminou o jogo
