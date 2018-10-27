@@ -30,11 +30,8 @@ canvas.addEventListener('mousemove',
 });
 
 //Variaveis para Começar a Animação
-let circleArray = [];
-let exsArray =[];
-let Objects =[];
-let InitialQuant =1;
-let SpawnRate = 20;
+let Objects = [];        //Armazena todos os Objetos X e O 's
+let SpawnRate = 20;      //Spawn rate dos X e O's todo frame. Quanto maior o valor, menor será o rate de spawn
 
 // Função para calculo de distancia:
 function dist(x1,y1,x2,y2){
@@ -50,21 +47,26 @@ function Exs(x,y,dx,dy,radius){
     this.dy=dy;
     this.radius = radius;
     this.isnFreezed = true;
+    //Função para desenhar os X's
     this.draw = function(){
-        let innerRadius = this.radius/2;
-        let iVert = [];
-        let ang = [
+        let innerRadius = this.radius/2;    //Tamano do raio interior do X
+        let iVert = [];                     //Vetor com os filhos de cada vertice
+        //Constante contendo os valores que cada filho deve ser multiplicado para o X ser formado
+        const ang = [
             [-1,-1],
             [1,1],
             [5,3],
             [3,-3]
-        ];
+        ];          
+
         for(var i = 0; i< 4;i++){
+            // Primeiro é Formado 4 xi/yi que representam os vértices pai
             var xi = this.x+innerRadius*Math.cos(i*Math.PI/2)
             var yi = this.y+innerRadius*Math.sin(i*Math.PI/2)
             iVert[i] = {
                 x: xi,
                 y: yi,
+                //Para cada um dos 4 vértices pai a dois filhos com multiplo do angulo de 45
                 child: [{
                     x: xi + innerRadius*Math.cos(ang[i%4][0]*Math.PI/4),
                     y: yi + innerRadius*Math.sin(ang[i%4][1]*Math.PI/4)
@@ -76,7 +78,7 @@ function Exs(x,y,dx,dy,radius){
             }
             
         }
-        
+        //Feito o desenho efetivamente usando os pontos calculados
         c.beginPath();
         c.moveTo(iVert[0].child[0].x, iVert[0].child[0].y);
         for(var point of iVert){
@@ -86,40 +88,46 @@ function Exs(x,y,dx,dy,radius){
            
         }
         c.lineTo(iVert[0].child[0].x, iVert[0].child[0].y);
+        //Linha preta
         c.strokeStyle = 'black';
         c.stroke();
+
+        //Fundo azul para o X
         c.fillStyle= 'rgba(0,0,255,0.4)';
         c.fill();
     }    
+
+    //Função para atualizar os dados de cada X
     this.update = function(){
+
+        //Se ele bater nos cantos da tela, sua velocidade horizontal é invertida e ele perde 20% da mesma
         if(this.x + this.radius > canvas.width || this.x - this.radius < 0){
             this.dx= -this.dx;
             this.dx *=0.8;
         }
+
+        // Se bater no chão a velocidade vertical é trocada e perde 10% dela
         if(this.y + this.radius > canvas.height && this.isnFreezed){
             this.dy= -this.dy;
+            this.dy *=0.9;
         }
+
+        //Armazena a altura maxima atingida
         if(this.dy < 0.2 && this.dy > -0.2){ //Creditos: Artur Hugo
             this.maxHeight = this.y;
         }
+
+        //Se a altura maxima atingida for baixa, ele poderá afundar para fora do mapa
         if(this.maxHeight > canvas.height - 2*this.radius){
             this.isnFreezed = false;
 		}
 		else{
 			this.isnFreezed = true;
-		}
-        if(this.y + this.radius > canvas.height){
-            this.dy *=0.9;        
         }
-		if( mouse.x > this.x - this.radius &&
-			mouse.x < this.x + this.radius &&
-			mouse.y < this.y + this.radius &&
-			mouse.y > this.y - this.radius
-        ){
-			this.dx+=mouse.dx;
-			this.dy+=mouse.dy;
-        }
+        
+        //Cuida das colisões entre os objetos
         for(cir of Objects){
+            //Calcula a distancia de cada objeto na tela, e caso tenham colidido, suas velocidades são trocadas
             if(dist(this.x,this.y,cir.x,cir.y) < this.radius + cir.radius){
                 var swap = this.dx;
                 this.dx = cir.dx;
@@ -129,8 +137,11 @@ function Exs(x,y,dx,dy,radius){
                 cir.dy = swap;
             }
         }
+
+        //Posição é incrementada de acordo com a velocidade
         this.x += this.dx;
         this.y += this.dy;
+        // Velocidade vertical é incrementada de acordo com a gravidade
         this.dy += g;
         this.draw();
     }
@@ -146,6 +157,8 @@ function Circle(x,y,dx,dy,radius){
     this.maxHeight = y;
     this.isnFreezed = true;
     this.Ec = radius*Math.pow(dy,2)/2;
+
+    //Desenha o circulo na tela usando suas especificações
     this.draw = function(){
         c.beginPath();
         c.arc(this.x,this.y,this.radius,0,Math.PI*2,false);
@@ -159,35 +172,37 @@ function Circle(x,y,dx,dy,radius){
         c.fill();
     }
 
+    //Função para atualizar os dados de cada X
     this.update = function(){
+
+        //Se ele bater nos cantos da tela, sua velocidade horizontal é invertida e ele perde 20% da mesma
         if(this.x + this.radius > canvas.width || this.x - this.radius < 0){
             this.dx= -this.dx;
             this.dx *=0.8;
         }
+
+        // Se bater no chão a velocidade vertical é trocada e perde 10% dela
         if(this.y + this.radius > canvas.height && this.isnFreezed){
             this.dy= -this.dy;
+            this.dy *=0.9;
         }
+
+        //Armazena a altura maxima atingida
         if(this.dy < 0.2 && this.dy > -0.2){ //Creditos: Artur Hugo
             this.maxHeight = this.y;
         }
+
+        //Se a altura maxima atingida for baixa, ele poderá afundar para fora do mapa
         if(this.maxHeight > canvas.height - 2*this.radius){
             this.isnFreezed = false;
 		}
 		else{
 			this.isnFreezed = true;
-		}
-        if(this.y + this.radius > canvas.height){
-            this.dy *=0.9;        
         }
-		if( mouse.x > this.x - this.radius &&
-			mouse.x < this.x + this.radius &&
-			mouse.y < this.y + this.radius &&
-			mouse.y > this.y - this.radius
-        ){
-			this.dx+=mouse.dx;
-			this.dy+=mouse.dy;
-        }
+        
+        //Cuida das colisões entre os objetos
         for(cir of Objects){
+            //Calcula a distancia de cada objeto na tela, e caso tenham colidido, suas velocidades são trocadas
             if(dist(this.x,this.y,cir.x,cir.y) < this.radius + cir.radius){
                 var swap = this.dx;
                 this.dx = cir.dx;
@@ -195,11 +210,13 @@ function Circle(x,y,dx,dy,radius){
                 swap = this.dy;
                 this.dy = cir.dy;
                 cir.dy = swap;
-                // this.x = this.x+this.radius + cir.radius
             }
         }
+
+        //Posição é incrementada de acordo com a velocidade
         this.x += this.dx;
         this.y += this.dy;
+        // Velocidade vertical é incrementada de acordo com a gravidade
         this.dy += g;
         this.draw();
     }
@@ -209,6 +226,7 @@ function Circle(x,y,dx,dy,radius){
 function SpawnDuble(){
 	var Spawn;
     Spawn = Math.random() * SpawnRate;
+    //Cria um novo Circulo
     if(Spawn < 1){
         var radius1 = (Math.random()*10)+20;
         var x1 = Math.random() * (canvas.width - radius1 *2)+ radius1;
@@ -216,6 +234,7 @@ function SpawnDuble(){
         var dy = (Math.random() - 0.5)* 0;
         Objects.push(new Circle(x1,-radius1,dx,dy,radius1));
     }
+    //Cria um novo X,não deixando que ele nasça em cima do circulo anterior
     if(Spawn < 1){
         do{
             var radius2 = (Math.random()*10)+20;
@@ -229,13 +248,22 @@ function SpawnDuble(){
 let willAnimate = true;
 //Função Da animação principal
 function animate(){
+    //Paga tudo na tela
     c.clearRect(0,0,canvas.width,canvas.height);
+
+    //Troca a cor de fundo do canvas
     c.fillStyle = CorDefundo;
     c.fillRect(0,0,window.innerWidth,window.innerHeight);
-	SpawnDuble();
+
+    //Tenta spawnar um X e um O todo frame
+    SpawnDuble();
+    
+    //Da update nas posições de todos os Objetos ( X e O )'s
     for(var i = 0; i< Objects.length;i++){
         Objects[i].update();
     }
+
+    //Confere se existe algum deles fora da tela, e caso exista, apaga-os do armazenamento
     for(var i = 0; i< Objects.length;i++){
         if( Objects[i].y > canvas.height + Objects[i].radius ||
             Objects[i].x + Objects[i].radius < 0 ||
@@ -244,14 +272,19 @@ function animate(){
             Objects.splice(i,1);
         }
     }
-    if(circleArray.length>20){
+
+    //Aumenta a gravidade e diminui spawnRate caso tenham muitos objetos
+    if(Objects.length>30){
         g=0.2;
         SpawnRate = 70;
     }
+    //Volta ao normal
     else{
         g=0.1;
         SpawnRate = 50;
     }
+
+    //Se a animação ainda dever acontecer, ela é feita
     if(willAnimate)requestAnimationFrame(animate);
 }
 
@@ -263,6 +296,8 @@ function StartGame(){
     game[0].style.display ='flex';
     willAnimate =false;
 }
+
+//Sai do jogo e volta ao menu
 function Sair(){
     var menu = document.getElementsByClassName('menu');
     var game = document.getElementsByClassName('wrapper');
