@@ -33,13 +33,25 @@ const clicarQuadrado = (quadrado) =>
             var winned;
             winned = winCond();         //É checado se alguém ganhou
             if(winned != false){
-                
+                winAlert(winned);
+                resetGame();
             }
         }
-        // logica a ser codada
-        // checar vitória
-        //  winCond()
     }
+
+// Faz um alerta diferente dependendo da forma de fim do jogo
+const winAlert = (winformat) => {
+    if(winformat == 'velha'){
+        alert(' Deu Velha :( ');
+        return;
+    }
+    if(winformat.player == 1){
+        alert('Parabéns, O ganhou!');
+    }
+    if(winformat.player == 0){
+        alert('Parabéns, X ganhou!');
+    }
+}
 
 //Tenta trocar o Background de algum quadrado
 const changeBG = (quadrado) => {
@@ -48,6 +60,7 @@ const changeBG = (quadrado) => {
 
     var bg = document.getElementById(quadrado).style.backgroundImage;
 
+    //Checa se já existe a imagem no local que está sendo jogado
     if(bg == 'url("o.png")' ||bg == 'url("x.png")'){
         return false;
     }
@@ -64,8 +77,9 @@ const changeBG = (quadrado) => {
 
 //Muda a informação na memoria de como está o campo
 const changeBoard = (quadrado) => {
-    var Idx;
-    Idx = boardString.indexOf(quadrado);
+    var Idx;                                
+    Idx = boardString.indexOf(quadrado);    // Pega o index do quadrado
+    // Muda o armazenamento da memoria do tabuleiro usando o index do array dos ids como base
     board[parseInt(Idx/board.length)][Idx%board.length] = turnCounter%2;
 }
 
