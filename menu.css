@@ -66,6 +66,7 @@ body{
 }
 .but{
     background-color: #C2DDC7;
+    color: black;
     border: none;
     margin-left: 10px;
     height: 2em;

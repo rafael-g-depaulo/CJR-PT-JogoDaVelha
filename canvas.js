@@ -235,6 +235,8 @@ function animate(){
 	SpawnDuble();
     for(var i = 0; i< Objects.length;i++){
         Objects[i].update();
+    }
+    for(var i = 0; i< Objects.length;i++){
         if( Objects[i].y > canvas.height + Objects[i].radius ||
             Objects[i].x + Objects[i].radius < 0 ||
             Objects[i].x - Objects[i].radius > canvas.width
