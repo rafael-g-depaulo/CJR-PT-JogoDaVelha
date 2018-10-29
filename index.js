@@ -6,7 +6,7 @@ const boardString = [
 ]
 
 // representação em memória do campo de jogo
-//   undenifed => vazio
+//   undefined => vazio
 //   0 => x
 //   1 => o
 let board = [
