@@ -121,7 +121,7 @@ const winCond = () => {
           break
         }
         // se chegou no ultimo quadrado e não deu break, é diagonal principal
-        if (i == board.length-1)
+        if (i == board.length)
             return {
                 win: 'dia',
                 num: 1,
@@ -136,7 +136,7 @@ const winCond = () => {
         if (board[i][blen-i] !== board[0][blen])
             break
         // se chegou no ultimo quadrado e não deu break, é diagonal principal
-        if (i == board.length-1)
+        if (i == board.length)
             return {
                 win: 'dia',
                 num: 2,
