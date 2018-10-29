@@ -30,14 +30,14 @@ const clicarQuadrado = (quadrado) =>
         if(foiJogado){
             changeBoard(quadrado);      //O armazanemento da memória do Tabuleiro é alterado
             turnCounter+=1;             //Turno é incrementado
-            var winned;
-            winned = winCond();         //É checado se alguém ganhou
-            if(winned != false){
-                winAlert(winned);
+            var won = winCond();         
+            if(won != false){           //É checado se alguém ganhou
+                winAlert(won);
                 resetGame();
             }
         }
     }
+    
 
 // Faz um alerta diferente dependendo da forma de fim do jogo
 const winAlert = (winformat) => {
@@ -83,6 +83,7 @@ const changeBoard = (quadrado) => {
     board[parseInt(Idx/board.length)][Idx%board.length] = turnCounter%2;
 }
 
+// Checa se o jogo acabou ou não
 const winCond = () => {
     // checa se terminou o jogo
 
@@ -135,7 +136,7 @@ const winCond = () => {
         if (board[i][blen-i] !== board[0][blen])
             break
         // se chegou no ultimo quadrado e não deu break, é diagonal principal
-        if (i === board.length)
+        if (i == board.length-1)
             return {
                 win: 'dia',
                 num: 2,
@@ -152,7 +153,7 @@ const winCond = () => {
     return 'velha';
 }
 
-let resetGame = () => {
+const resetGame = () => {
     // reseta a representação em memória do jogo
     for (row of board)
     for (sqr in row)
@@ -164,10 +165,6 @@ let resetGame = () => {
     boardString.forEach (
         (sqr) => document.getElementById(sqr).style.backgroundImage = ''
     )
-}
-
-const setSquare = (xOr0) => {
-
 }
 
 // aloca os eventListeners
