@@ -116,10 +116,11 @@ const winCond = () => {
     // vitória diagonal principal (\)
     for (i in board) {
         // se algum quadrado for diferente do primeiro, break
-        if (board[i][i] !== board[0][0])
-            break
+        if (board[i][i] !== board[0][0]) {
+          break
+        }
         // se chegou no ultimo quadrado e não deu break, é diagonal principal
-        if (i === board.length)
+        if (i == board.length-1)
             return {
                 win: 'dia',
                 num: 1,
