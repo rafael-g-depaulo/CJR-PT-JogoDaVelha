@@ -88,3 +88,34 @@ body{
     display: flex;
     justify-content: center;
 }
+
+.Butoes{
+    display: flex;
+    justify-content: center;
+    margin-left: 30%;
+}
+#butreset{
+    background-color: rgb(30, 151, 30);
+    border: none;
+    height: 2em;
+    width: 4em;
+    font-size: 1.5em;
+    border-radius: 10px;
+}
+#sairbuttom{
+    background-color: rgb(30, 151, 30);
+    border: none;
+    margin-left: 10px;
+    height: 2em;
+    width: 4em;
+    font-size: 1.5em;
+    border-radius: 10px;
+}
+#butreset:hover{
+    background-color: rgb(21, 110, 21);
+    cursor: pointer;
+}
+#sairbuttom:hover{
+    background-color: rgb(21, 110, 21);
+    cursor: pointer;
+}

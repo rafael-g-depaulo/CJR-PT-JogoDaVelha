@@ -1,11 +1,14 @@
 .wrapper{
     width:100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .center {
     padding-top: 100px;
     margin: auto;
     width: 38%;
+    justify-content: center;
 
 }
 
